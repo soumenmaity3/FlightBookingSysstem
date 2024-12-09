@@ -18,13 +18,15 @@ import androidx.core.view.WindowInsetsCompat;
 
 import java.util.ArrayList;
 import java.util.Random;
+
 public class FromFillUp extends AppCompatActivity {
-TextView startp,destinationp,flightNumber,flightName;
-EditText fName,lName,mobileNo,otp;
-TextView price,seatNo,redText;
-int priceF=5600;
-Button getOTP,ticit;
-String otp2,number;
+    TextView startp, destinationp, flightNumber, flightName;
+    EditText fName, lName, mobileNo, otp;
+    TextView price, seatNo, redText;
+    int priceF = 5600;
+    Button getOTP, ticit;
+    String otp2, number;
+
     @SuppressLint({"MissingInflatedId", "WrongViewCast"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,31 +38,31 @@ String otp2,number;
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        startp=findViewById(R.id.startFlight1);
-        destinationp=findViewById(R.id.destinationFlight1);
-        fName=findViewById(R.id.passName);
-        lName=findViewById(R.id.passLName);
-        mobileNo=findViewById(R.id.passMobile);
-        otp=findViewById(R.id.enterOTP);
-        seatNo=findViewById(R.id.seatNo);
-        price=findViewById(R.id.flightPrice);
-        getOTP=findViewById(R.id.forOTP);
-        ticit=findViewById(R.id.btnConfirmContinue);
-        redText=findViewById(R.id.redText);
-        flightNumber=findViewById(R.id.flightNumber2);
-        flightName=findViewById(R.id.flightName2);
+        startp = findViewById(R.id.startFlight1);
+        destinationp = findViewById(R.id.destinationFlight1);
+        fName = findViewById(R.id.passName);
+        lName = findViewById(R.id.passLName);
+        mobileNo = findViewById(R.id.passMobile);
+        otp = findViewById(R.id.enterOTP);
+        seatNo = findViewById(R.id.seatNo);
+        price = findViewById(R.id.flightPrice);
+        getOTP = findViewById(R.id.forOTP);
+        ticit = findViewById(R.id.btnConfirmContinue);
+        redText = findViewById(R.id.redText);
+        flightNumber = findViewById(R.id.flightNumber2);
+        flightName = findViewById(R.id.flightName2);
 
-        Intent getData=getIntent();
-        ArrayList<String>seat=getData.getStringArrayListExtra("Seat");
-        int seatTotal=getData.getIntExtra("TotalSeat",0);
-        String start=getData.getStringExtra("Start");
-        String destinationPlace=getData.getStringExtra("Destination");
-        String flightName2=getData.getStringExtra("FlightName");
-        String flightNumber2=getData.getStringExtra("FlightNumber");
+        Intent getData = getIntent();
+        ArrayList<String> seat = getData.getStringArrayListExtra("Seat");
+        int seatTotal = getData.getIntExtra("TotalSeat", 0);
+        String start = getData.getStringExtra("Start");
+        String destinationPlace = getData.getStringExtra("Destination");
+        String flightName2 = getData.getStringExtra("FlightName");
+        String flightNumber2 = getData.getStringExtra("FlightNumber");
 
         flightName.setText(flightName2);
         flightNumber.setText(flightNumber2);
-        priceF=priceF*seatTotal;
+        priceF = priceF * seatTotal;
         price.setText(String.valueOf(priceF));
         if (seat != null) {
             String seatText = String.join(", ", seat); // Combine ArrayList into a single string
@@ -90,26 +92,26 @@ String otp2,number;
             @Override
             public void onClick(View v) {
 
-                String name=fName.getText().toString();
-                String last=lName.getText().toString();
+                String name = fName.getText().toString();
+                String last = lName.getText().toString();
                 number = mobileNo.getText().toString();
-                 if (name.isEmpty()||last.isEmpty()||number.isEmpty()) {
+                if (name.isEmpty() || last.isEmpty() || number.isEmpty()) {
                     Toast.makeText(FromFillUp.this, "Please Fill Up The From", Toast.LENGTH_SHORT).show();
                     redText.setTextColor(Color.RED);
-                }else{
-                    name=fName.getText().toString();
-                    last=lName.getText().toString();
+                } else {
+                    name = fName.getText().toString();
+                    last = lName.getText().toString();
                     String fullName = name.concat(" ").concat(last);
-                    number=mobileNo.getText().toString();
+                    number = mobileNo.getText().toString();
                     Intent iPrint = new Intent(FromFillUp.this, LikePayment.class);
-                    iPrint.putExtra("Start",start);
-                    iPrint.putExtra("Destination",destinationPlace);
-                    iPrint.putExtra("fullName",fullName);
-                    iPrint.putExtra("SeatNo",seat);
-                    iPrint.putExtra("FlightName",flightName2);
-                    iPrint.putExtra("FlightNumber",flightNumber2);
-                    iPrint.putExtra("Mobile",number);
-                    iPrint.putExtra("Price",String.valueOf(priceF));
+                    iPrint.putExtra("Start", start);
+                    iPrint.putExtra("Destination", destinationPlace);
+                    iPrint.putExtra("fullName", fullName);
+                    iPrint.putExtra("SeatNo", seat);
+                    iPrint.putExtra("FlightName", flightName2);
+                    iPrint.putExtra("FlightNumber", flightNumber2);
+                    iPrint.putExtra("Mobile", number);
+                    iPrint.putExtra("Price", String.valueOf(priceF));
                     startActivity(iPrint);
                 }
             }

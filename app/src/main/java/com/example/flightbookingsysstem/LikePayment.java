@@ -38,15 +38,15 @@ public class LikePayment extends AppCompatActivity {
         tvTotalAmount = findViewById(R.id.tvTotalAmount);
         btnConfirmPayment = findViewById(R.id.btnConfirmPay);
 
-        Intent getData=getIntent();
-        String start=getData.getStringExtra("Start");
-        ArrayList<String> seat=getData.getStringArrayListExtra("SeatNo");
-        String destinationPlace=getData.getStringExtra("Destination");
-        String flightName2=getData.getStringExtra("FlightName");
-        String flightNumber2=getData.getStringExtra("FlightNumber");
-        String fullName=getData.getStringExtra("fullName");
-        String mobileNumber=getData.getStringExtra("Mobile");
-        String price=getData.getStringExtra("Price");
+        Intent getData = getIntent();
+        String start = getData.getStringExtra("Start");
+        ArrayList<String> seat = getData.getStringArrayListExtra("SeatNo");
+        String destinationPlace = getData.getStringExtra("Destination");
+        String flightName2 = getData.getStringExtra("FlightName");
+        String flightNumber2 = getData.getStringExtra("FlightNumber");
+        String fullName = getData.getStringExtra("fullName");
+        String mobileNumber = getData.getStringExtra("Mobile");
+        String price = getData.getStringExtra("Price");
 
         tvTotalAmount.setText(price);
 
@@ -56,14 +56,14 @@ public class LikePayment extends AppCompatActivity {
                 if (validateInputs()) {
                     // Simulate payment processing (you can add payment gateway logic here)
                     Toast.makeText(LikePayment.this, "Payment Successful!", Toast.LENGTH_LONG).show();
-                    Intent inext=new Intent(LikePayment.this, TicitPrint.class);
-                    inext.putExtra("Start",start);
-                    inext.putExtra("SeatNo",seat);
-                    inext.putExtra("Destination",destinationPlace);
-                    inext.putExtra("fullName",fullName);
-                    inext.putExtra("Mobile",mobileNumber);
-                    inext.putExtra("FlightName",flightName2);
-                    inext.putExtra("FlightNumber",flightNumber2);
+                    Intent inext = new Intent(LikePayment.this, TicitPrint.class);
+                    inext.putExtra("Start", start);
+                    inext.putExtra("SeatNo", seat);
+                    inext.putExtra("Destination", destinationPlace);
+                    inext.putExtra("fullName", fullName);
+                    inext.putExtra("Mobile", mobileNumber);
+                    inext.putExtra("FlightName", flightName2);
+                    inext.putExtra("FlightNumber", flightNumber2);
                     startActivity(inext);
                 }
             }

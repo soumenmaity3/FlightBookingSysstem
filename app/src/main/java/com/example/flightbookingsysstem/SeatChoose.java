@@ -14,7 +14,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 
 public class SeatChoose extends AppCompatActivity {
-TextView start,destination;
+    TextView start, destination;
     private GridLayout seatGrid;
     private ArrayList<String> selectedSeats = new ArrayList<>();
     private Button confirmButton;
@@ -27,14 +27,14 @@ TextView start,destination;
 
         seatGrid = findViewById(R.id.seatGrid);
         confirmButton = findViewById(R.id.btnConfirm);
-        start=findViewById(R.id.startFlight2);
-        destination=findViewById(R.id.destinationFlight2);
+        start = findViewById(R.id.startFlight2);
+        destination = findViewById(R.id.destinationFlight2);
 
-        Intent getData=getIntent();
-        String startPlace=getData.getStringExtra("StartP");
-        String destinationPlace=getData.getStringExtra("DestinationP");
-        String flightName=getData.getStringExtra("FlightName");
-        String flightNumber=getData.getStringExtra("FlightNumber");
+        Intent getData = getIntent();
+        String startPlace = getData.getStringExtra("StartP");
+        String destinationPlace = getData.getStringExtra("DestinationP");
+        String flightName = getData.getStringExtra("FlightName");
+        String flightNumber = getData.getStringExtra("FlightNumber");
         start.setText(startPlace);
         destination.setText(destinationPlace);
 
@@ -45,16 +45,16 @@ TextView start,destination;
                 Toast.makeText(SeatChoose.this, "Please select at least one seat", Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(SeatChoose.this, "Seats Confirmed: " + selectedSeats, Toast.LENGTH_LONG).show();
-                Intent inext=new Intent(SeatChoose.this, FromFillUp.class);
-                int lengthSeat=selectedSeats.size();
-                inext.putExtra("TotalSeat",lengthSeat);
-                inext.putExtra("seatNo",selectedSeats);
-                inext.putExtra("Start",startPlace);
-                inext.putExtra("FlightName",flightName);
-                inext.putExtra("FlightNumber",flightNumber);
+                Intent inext = new Intent(SeatChoose.this, FromFillUp.class);
+                int lengthSeat = selectedSeats.size();
+                inext.putExtra("TotalSeat", lengthSeat);
+                inext.putExtra("seatNo", selectedSeats);
+                inext.putExtra("Start", startPlace);
+                inext.putExtra("FlightName", flightName);
+                inext.putExtra("FlightNumber", flightNumber);
                 inext.putExtra("TotalSeat", selectedSeats.size());
-                inext.putStringArrayListExtra("Seat",selectedSeats);
-                inext.putExtra("Destination",destinationPlace);
+                inext.putStringArrayListExtra("Seat", selectedSeats);
+                inext.putExtra("Destination", destinationPlace);
                 startActivity(inext);
             }
         });

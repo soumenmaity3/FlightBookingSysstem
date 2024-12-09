@@ -15,7 +15,8 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class TicitPrint extends AppCompatActivity {
-TextView start,destination,mobile,ticNumber,name,flightName4,flightNumber4,seatNo1;
+    TextView start, destination, mobile, ticNumber, name, flightName4, flightNumber4, seatNo1;
+
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,23 +28,23 @@ TextView start,destination,mobile,ticNumber,name,flightName4,flightNumber4,seatN
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        start=findViewById(R.id.forStart);
-        destination=findViewById(R.id.forDestination);
-        mobile=findViewById(R.id.mobileNumber);
-        ticNumber=findViewById(R.id.ticketNumber);
-        name=findViewById(R.id.fullName);
-        flightName4=findViewById(R.id.flightName3);
-        flightNumber4=findViewById(R.id.flightNumber3);
-        seatNo1=findViewById(R.id.seatNo);
+        start = findViewById(R.id.forStart);
+        destination = findViewById(R.id.forDestination);
+        mobile = findViewById(R.id.mobileNumber);
+        ticNumber = findViewById(R.id.ticketNumber);
+        name = findViewById(R.id.fullName);
+        flightName4 = findViewById(R.id.flightName3);
+        flightNumber4 = findViewById(R.id.flightNumber3);
+        seatNo1 = findViewById(R.id.seatNo);
 
-        Intent iData=getIntent();
-        ArrayList<String> seat=getIntent().getStringArrayListExtra("SeatNo");
-        String from=iData.getStringExtra("Start");
-        String to=iData.getStringExtra("Destination");
-        String fullName=iData.getStringExtra("fullName");
-        String mobileNo=iData.getStringExtra("Mobile");
-        String flightName3=iData.getStringExtra("FlightName");
-        String flightNumber3=iData.getStringExtra("FlightNumber");
+        Intent iData = getIntent();
+        ArrayList<String> seat = getIntent().getStringArrayListExtra("SeatNo");
+        String from = iData.getStringExtra("Start");
+        String to = iData.getStringExtra("Destination");
+        String fullName = iData.getStringExtra("fullName");
+        String mobileNo = iData.getStringExtra("Mobile");
+        String flightName3 = iData.getStringExtra("FlightName");
+        String flightNumber3 = iData.getStringExtra("FlightNumber");
 
         flightNumber4.setText(flightNumber3);
         flightName4.setText(flightName3);
@@ -51,7 +52,7 @@ TextView start,destination,mobile,ticNumber,name,flightName4,flightNumber4,seatN
         destination.setText(to);
         mobile.setText(mobileNo);
         name.setText(fullName);
-        String tNumber=generateTickitNumber();
+        String tNumber = generateTickitNumber();
         ticNumber.setText(tNumber);
         if (seat != null) {
             String seatText = String.join(", ", seat); // Combine ArrayList into a single string
@@ -61,6 +62,7 @@ TextView start,destination,mobile,ticNumber,name,flightName4,flightNumber4,seatN
         }
 
     }
+
     public static String generateTickitNumber() {
         Random random = new Random();
         StringBuilder otp = new StringBuilder();
