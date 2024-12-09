@@ -268,6 +268,12 @@
             android:ems="8"
             android:hint="OTP"
             android:textColor="@color/black" />
+        <TextView
+            android:id="@+id/redTextOtp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="225dp"
+            android:textSize="12dp" />
 
         <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"

@@ -95,10 +95,15 @@ public class FromFillUp extends AppCompatActivity {
                 String name = fName.getText().toString();
                 String last = lName.getText().toString();
                 number = mobileNo.getText().toString();
+                String otp5=otp.getText().toString();
                 if (name.isEmpty() || last.isEmpty() || number.isEmpty()) {
                     Toast.makeText(FromFillUp.this, "Please Fill Up The From", Toast.LENGTH_SHORT).show();
                     redText.setTextColor(Color.RED);
-                } else {
+                } else if(otp5.isEmpty()){
+                    TextView forotpp=findViewById(R.id.redTextOtp);
+                    forotpp.setText("Enter 4 digits otp");
+                    forotpp.setTextColor(Color.RED);
+                }else {
                     name = fName.getText().toString();
                     last = lName.getText().toString();
                     String fullName = name.concat(" ").concat(last);
