@@ -45,6 +45,12 @@ public class FlightChoose extends AppCompatActivity {
 
         arrFlight.add(new FlightModel(R.drawable.indigo,"Indigo  ",generateTickitNumber(), startPlace, destinationPlace, "2:30 PM", "6:00 PM"));
         arrFlight.add(new FlightModel(R.drawable.flight_fli,"Flight  ",generateTickitNumber(), startPlace, destinationPlace, "3:00 PM", "7:00 PM"));
+        arrFlight.add(new FlightModel(R.drawable.airindia,"Airindia  ",generateTickitNumber(), startPlace, destinationPlace, "3:00 PM", "7:00 PM"));
+        arrFlight.add(new FlightModel(R.drawable.delta_logo,"Delta  ",generateTickitNumber(), startPlace, destinationPlace, "3:00 PM", "7:00 PM"));
+        arrFlight.add(new FlightModel(R.drawable.jetstar,"Jetstar  ",generateTickitNumber(), startPlace, destinationPlace, "3:00 PM", "7:00 PM"));
+        arrFlight.add(new FlightModel(R.drawable.delta_logo,"Delta  ",generateTickitNumber(), startPlace, destinationPlace, "3:00 PM", "7:00 PM"));
+        arrFlight.add(new FlightModel(R.drawable.jetblue,"Jetblue  ",generateTickitNumber(), startPlace, destinationPlace, "3:00 PM", "7:00 PM"));
+        arrFlight.add(new FlightModel(R.drawable.airasia,"Airasia  ",generateTickitNumber(), startPlace, destinationPlace, "3:00 PM", "7:00 PM"));
 
         FlightRecyclerAdapter adapter = new FlightRecyclerAdapter(this, arrFlight);
         recyclerView.setAdapter(adapter);
