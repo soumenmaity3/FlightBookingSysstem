@@ -32,7 +32,7 @@ import java.util.ArrayList;
 
 public class FromFillUp extends AppCompatActivity {
     EditText fName, lName, mobileNo, otp;
-    TextView startp, destinationp, price, seatNo, redText;
+    TextView startp, destinationp, price, seatNo, redText,flightName,flightNumber;
     Button getOTP, ticit;
     String number,otp3,otp4;
     private static final String CHANNELID = "My_Channel";
@@ -58,6 +58,8 @@ public class FromFillUp extends AppCompatActivity {
         getOTP = findViewById(R.id.forOTP);
         ticit = findViewById(R.id.btnConfirmContinue);
         redText = findViewById(R.id.redText);
+        flightName=findViewById(R.id.flightName2);
+        flightNumber=findViewById(R.id.flightNumber2);
 
         // Request necessary permissions
         requestSmsPermission();
@@ -67,12 +69,16 @@ public class FromFillUp extends AppCompatActivity {
         ArrayList<String> seat = getData.getStringArrayListExtra("Seat");
         int seatTotal = getData.getIntExtra("TotalSeat", 0);
         String start = getData.getStringExtra("Start");
+        String flName=getData.getStringExtra("FlightName");
+        String fNumber=getData.getStringExtra("FlightNumber");
         String destinationPlace = getData.getStringExtra("Destination");
 
         // Set data to views
         startp.setText(start != null ? start : "N/A");
         destinationp.setText(destinationPlace != null ? destinationPlace : "N/A");
         price.setText(String.valueOf(5600 * seatTotal));
+        flightName.setText(flName);
+        flightNumber.setText(fNumber);
         if (seat != null) {
             seatNo.setText(String.join(", ", seat));
         } else {
@@ -128,6 +134,7 @@ public class FromFillUp extends AppCompatActivity {
                 confirmIntent.putExtra("Price", price.getText().toString());
                 confirmIntent.putExtra("SeatNo", seat);
                 startActivity(confirmIntent);
+                finish();
             }
         });
     }
