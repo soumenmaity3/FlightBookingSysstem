@@ -40,8 +40,6 @@ public class FromFillUp extends AppCompatActivity {
     private static final int REQUEST_NOTIFICATION_PERMISSION = 1;
     private static final int REQUEST_CODE = 100;
 
-    // OTP Receiver
-    private BroadcastReceiver otpReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,8 +62,6 @@ public class FromFillUp extends AppCompatActivity {
         // Request necessary permissions
         requestSmsPermission();
         requestNotificationPermission();
-        otp3=generateOTP();
-
         // Get intent data
         Intent getData = getIntent();
         ArrayList<String> seat = getData.getStringArrayListExtra("Seat");
@@ -94,6 +90,7 @@ public class FromFillUp extends AppCompatActivity {
                 redText.setText("Enter a valid 10-digit mobile number!");
                 redText.setTextColor(Color.RED);
             } else {
+                otp3=generateOTP();
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                     if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
                         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, REQUEST_NOTIFICATION_PERMISSION);
@@ -151,14 +148,6 @@ public class FromFillUp extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        // Unregister OTP Receiver to prevent memory leaks
-        if (otpReceiver != null) {
-            unregisterReceiver(otpReceiver);
-        }
-    }
     private void showNotification() {
         // Retrieve the drawable and handle potential null value
 
