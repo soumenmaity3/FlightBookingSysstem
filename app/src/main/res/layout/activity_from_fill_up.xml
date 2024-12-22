@@ -266,6 +266,7 @@
             android:layout_gravity="end"
             android:background="@drawable/edit_text_bg"
             android:ems="8"
+            android:inputType="numberSigned"
             android:hint="OTP"
             android:textColor="@color/black" />
         <TextView

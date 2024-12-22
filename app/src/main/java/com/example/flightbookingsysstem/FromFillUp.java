@@ -1,140 +1,248 @@
 package com.example.flightbookingsysstem;
 
-import static android.hardware.camera2.params.RggbChannelVector.RED;
-
-import android.annotation.SuppressLint;
+import android.Manifest;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.net.Uri;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
-import android.widget.*;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 public class FromFillUp extends AppCompatActivity {
-    TextView startp, destinationp, flightNumber, flightName;
     EditText fName, lName, mobileNo, otp;
-    TextView price, seatNo, redText;
-    int priceF = 5600;
+    TextView startp, destinationp, price, seatNo, redText;
     Button getOTP, ticit;
-    String otp2, number;
+    String number,otp3,otp4;
+    private static final String CHANNELID = "My_Channel";
+    private static final int NOTIFICATIONID = 100;
+    private static final int REQUEST_NOTIFICATION_PERMISSION = 1;
+    private static final int REQUEST_CODE = 100;
 
-    @SuppressLint({"MissingInflatedId", "WrongViewCast"})
+    // OTP Receiver
+    private BroadcastReceiver otpReceiver;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_from_fill_up);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
-        startp = findViewById(R.id.startFlight1);
-        destinationp = findViewById(R.id.destinationFlight1);
+
+        // Initialize views
         fName = findViewById(R.id.passName);
         lName = findViewById(R.id.passLName);
         mobileNo = findViewById(R.id.passMobile);
         otp = findViewById(R.id.enterOTP);
+        startp = findViewById(R.id.startFlight1);
+        destinationp = findViewById(R.id.destinationFlight1);
         seatNo = findViewById(R.id.seatNo);
         price = findViewById(R.id.flightPrice);
         getOTP = findViewById(R.id.forOTP);
         ticit = findViewById(R.id.btnConfirmContinue);
         redText = findViewById(R.id.redText);
-        flightNumber = findViewById(R.id.flightNumber2);
-        flightName = findViewById(R.id.flightName2);
 
+        // Request necessary permissions
+        requestSmsPermission();
+        requestNotificationPermission();
+        otp3=generateOTP();
+
+        // Get intent data
         Intent getData = getIntent();
         ArrayList<String> seat = getData.getStringArrayListExtra("Seat");
         int seatTotal = getData.getIntExtra("TotalSeat", 0);
         String start = getData.getStringExtra("Start");
         String destinationPlace = getData.getStringExtra("Destination");
-        String flightName2 = getData.getStringExtra("FlightName");
-        String flightNumber2 = getData.getStringExtra("FlightNumber");
 
-        flightName.setText(flightName2);
-        flightNumber.setText(flightNumber2);
-        priceF = priceF * seatTotal;
-        price.setText(String.valueOf(priceF));
+        // Set data to views
+        startp.setText(start != null ? start : "N/A");
+        destinationp.setText(destinationPlace != null ? destinationPlace : "N/A");
+        price.setText(String.valueOf(5600 * seatTotal));
         if (seat != null) {
-            String seatText = String.join(", ", seat); // Combine ArrayList into a single string
-            seatNo.setText(seatText);
+            seatNo.setText(String.join(", ", seat));
         } else {
             seatNo.setText("No seats selected");
         }
-        startp.setText(start != null ? start : "N/A");
-        destinationp.setText(destinationPlace != null ? destinationPlace : "N/A");
 
-//        otp2=generateOTP();
-        getOTP.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                number = mobileNo.getText().toString();
-                if (number.isEmpty() || number.length() != 10) {
-                    redText.setText("Enter a 10-digit number");
-                    redText.setTextColor(Color.RED);
+        // Get OTP button click listener
+        getOTP.setOnClickListener(v -> {
+            number = mobileNo.getText().toString();
+            if (number.length() == 10) {
+                number = "+91" + mobileNo.getText().toString();
+            }
+
+            if (number.isEmpty() || number.length() != 13) {
+                redText.setText("Enter a valid 10-digit mobile number!");
+                redText.setTextColor(Color.RED);
+            } else {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, REQUEST_NOTIFICATION_PERMISSION);
+                    } else {
+                        showNotification(); // If permission is already granted, show the notification
+                    }
                 } else {
-                    otp2 = generateOTP();
-                    otp.setText(otp2);
+                    showNotification(); // For Android versions below 13, show the notification directly
                 }
             }
         });
 
-        ticit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                String name = fName.getText().toString();
-                String last = lName.getText().toString();
-                number = mobileNo.getText().toString();
-                String otp5=otp.getText().toString();
-                if (name.isEmpty() || last.isEmpty() || number.isEmpty()) {
-                    Toast.makeText(FromFillUp.this, "Please Fill Up The From", Toast.LENGTH_SHORT).show();
-                    redText.setTextColor(Color.RED);
-                } else if(otp5.isEmpty()){
-                    TextView forotpp=findViewById(R.id.redTextOtp);
-                    forotpp.setText("Enter 4 digits otp");
-                    forotpp.setTextColor(Color.RED);
-                }else {
-                    name = fName.getText().toString();
-                    last = lName.getText().toString();
-                    String fullName = name.concat(" ").concat(last);
-                    number = mobileNo.getText().toString();
-                    Intent iPrint = new Intent(FromFillUp.this, LikePayment.class);
-                    iPrint.putExtra("Start", start);
-                    iPrint.putExtra("Destination", destinationPlace);
-                    iPrint.putExtra("fullName", fullName);
-                    iPrint.putExtra("SeatNo", seat);
-                    iPrint.putExtra("FlightName", flightName2);
-                    iPrint.putExtra("FlightNumber", flightNumber2);
-                    iPrint.putExtra("Mobile", number);
-                    iPrint.putExtra("Price", String.valueOf(priceF));
-                    startActivity(iPrint);
-                }
+        // Confirm button click listener
+        ticit.setOnClickListener(v -> {
+            String firstName = fName.getText().toString();
+            String lastName = lName.getText().toString();
+            String mobile = mobileNo.getText().toString();
+            String otpInput = otp.getText().toString();
+            otp4=otp.getText().toString();
+            if (firstName.isEmpty() || lastName.isEmpty() || mobile.isEmpty()) {
+                Toast.makeText(this, "Please fill in all details!", Toast.LENGTH_SHORT).show();
+            } else if (otpInput.isEmpty()) {
+                redText.setText("Please enter the received OTP!");
+                redText.setTextColor(Color.RED);
+            } else if (!otp3.equals(otp4)) {
+                redText.setText("Enter Correct OTP");
+                redText.setTextColor(Color.RED);
+            } else {
+                // Navigate to LikePayment activity
+                Intent confirmIntent = new Intent(this, LikePayment.class);
+                confirmIntent.putExtra("Start", start);
+                confirmIntent.putExtra("Destination", destinationPlace);
+                confirmIntent.putExtra("fullName", firstName + " " + lastName);
+                confirmIntent.putExtra("Mobile", mobile);
+                confirmIntent.putExtra("Price", price.getText().toString());
+                confirmIntent.putExtra("SeatNo", seat);
+                startActivity(confirmIntent);
             }
         });
-
-
     }
 
+    // Request SMS permissions
+    private void requestSmsPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.SEND_SMS}, 1);
+        }
+    }
 
-    public static String generateOTP() {
-        Random random = new Random();
-        StringBuilder otp = new StringBuilder();
+    // Request Notification permissions (Android 13+)
+    private void requestNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, 2);
+            }
+        }
+    }
 
-        // Generate 4 random digits for OTP
-        for (int i = 0; i < 4; i++) {
-            otp.append(random.nextInt(10)); // Append a random digit (0-9)
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // Unregister OTP Receiver to prevent memory leaks
+        if (otpReceiver != null) {
+            unregisterReceiver(otpReceiver);
+        }
+    }
+    private void showNotification() {
+        // Retrieve the drawable and handle potential null value
+
+        Drawable drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.airplane, null);
+        if (drawable == null) {
+            Toast.makeText(this, "Drawable not found", Toast.LENGTH_SHORT).show();
+            return;  // If drawable not found, exit the function
         }
 
-        return otp.toString(); // Return OTP as a string
+        Bitmap largeIcon = null;
+
+        // Check if the drawable is a BitmapDrawable before casting
+        if (drawable instanceof BitmapDrawable) {
+            BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
+            largeIcon = bitmapDrawable.getBitmap();
+        }
+
+        NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        if (nm == null) {
+            Toast.makeText(this, "Notification Manager not available", Toast.LENGTH_SHORT).show();
+            return; // If NotificationManager is null, exit the function
+        }
+
+        Notification notification;
+
+        // For Android O (API 26) and above, create a notification channel
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(CHANNELID, "New Channel", NotificationManager.IMPORTANCE_HIGH);
+            nm.createNotificationChannel(channel);
+        }
+
+        Intent iNoti = new Intent(getApplicationContext(), MainActivity.class);
+        iNoti.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+        // Specify mutability flag based on the Android version
+        PendingIntent pi;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            pi = PendingIntent.getActivity(this, REQUEST_CODE, iNoti, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE);
+        } else {
+            pi = PendingIntent.getActivity(this, REQUEST_CODE, iNoti, PendingIntent.FLAG_UPDATE_CURRENT);
+        }
+        Notification.BigPictureStyle bigPictureStyle=new Notification.BigPictureStyle()
+                .bigPicture( ((BitmapDrawable) (ResourcesCompat.getDrawable(getResources(), R.drawable.airplane, null))).getBitmap())
+                .bigLargeIcon(largeIcon)
+                .setBigContentTitle("OTP sent by Flight Booking App")
+                .setSummaryText("OTP- "+otp3);
+
+        Notification.InboxStyle inboxStyle=new Notification.InboxStyle()
+                .addLine("OTP is "+otp3)
+
+                .setBigContentTitle("OTP Message")
+                .setSummaryText("Message from Flight Booking App");
+
+        // Build the notification (with and without channels depending on the Android version)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            // Build notification for API 26+
+            notification = new Notification.Builder(this, CHANNELID)
+                    .setLargeIcon(largeIcon)
+                    .setSmallIcon(R.drawable.airplane)  // Ensure this icon is valid for notifications
+                    .setContentTitle("OTP Message From Flight Booking App")
+                    .setContentText("OTP - "+otp3)
+                    .setContentIntent(pi)
+                    .setAutoCancel(false)
+                    .setStyle(inboxStyle)
+                    .setAutoCancel(true)  // Dismiss the notification after clicking it
+                    .build();
+        } else {
+            // Build notification for below API 26
+            notification = new Notification.Builder(this)
+                    .setLargeIcon(largeIcon)
+                    .setSmallIcon(R.drawable.airplane)
+                    .setContentTitle("OTP Message From Flight Booking App")
+                    .setContentText("This message is for OTP")
+                    .setContentIntent(pi)
+                    .setAutoCancel(false)
+                    .setStyle(inboxStyle)
+                    .setAutoCancel(true)
+                    .build();
+        }
+
+        // Show the notification
+        nm.notify(NOTIFICATIONID, notification);
+    }
+    public static String generateOTP() {
+        return String.format("%04d", (int) (Math.random() * 10000));
     }
 }

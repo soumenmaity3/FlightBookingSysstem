@@ -2,6 +2,16 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-feature
+        android:name="android.hardware.telephony"
+        android:required="false" />
+
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <uses-permission android:name="android.permission.READ_SMS" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -12,30 +22,29 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FlightBookingSysstem"
         tools:targetApi="31">
-        <activity
-            android:name=".LikePayment"
-            android:exported="false" />
-        <activity
-            android:name=".TicitPrint"
-            android:exported="false" />
-        <activity
-            android:name=".SeatChoose"
-            android:exported="false" />
-        <activity
-            android:name=".FromFillUp"
-            android:exported="false" />
-        <activity
-            android:name=".FlightChoose"
-            android:exported="false" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-    </application>
 
+        <activity android:name=".LikePayment" android:exported="false" />
+        <activity android:name=".TicitPrint" android:exported="false" />
+        <activity android:name=".SeatChoose" android:exported="false" />
+        <activity android:name=".FromFillUp" android:exported="true" />
+        <activity android:name=".FlightChoose" android:exported="false" />
+
+        <receiver
+            android:name=".OTPSender"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.example.flightbookingsysstem.OTP_ACTION" />
+            </intent-filter>
+        </receiver>
+
+    </application>
 </manifest>
