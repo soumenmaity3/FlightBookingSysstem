@@ -134,7 +134,6 @@ public class FromFillUp extends AppCompatActivity {
                 confirmIntent.putExtra("Price", price.getText().toString());
                 confirmIntent.putExtra("SeatNo", seat);
                 startActivity(confirmIntent);
-                finish();
             }
         });
     }

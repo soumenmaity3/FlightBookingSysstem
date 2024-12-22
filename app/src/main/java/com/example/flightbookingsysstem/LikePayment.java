@@ -65,6 +65,7 @@ public class LikePayment extends AppCompatActivity {
                     inext.putExtra("FlightName", flightName2);
                     inext.putExtra("FlightNumber", flightNumber2);
                     startActivity(inext);
+                    finish();
                 }
             }
         });
