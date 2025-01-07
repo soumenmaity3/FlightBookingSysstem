@@ -101,15 +101,14 @@ public class FromFillUp extends AppCompatActivity {
                     if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
                         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, REQUEST_NOTIFICATION_PERMISSION);
                     } else {
-                        showNotification(); // If permission is already granted, show the notification
+                        showNotification();
                     }
                 } else {
-                    showNotification(); // For Android versions below 13, show the notification directly
+                    showNotification();
                 }
             }
         });
 
-        // Confirm button click listener
         ticit.setOnClickListener(v -> {
             String firstName = fName.getText().toString();
             String lastName = lName.getText().toString();
@@ -138,14 +137,12 @@ public class FromFillUp extends AppCompatActivity {
         });
     }
 
-    // Request SMS permissions
     private void requestSmsPermission() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.SEND_SMS}, 1);
         }
     }
 
-    // Request Notification permissions (Android 13+)
     private void requestNotificationPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
@@ -185,7 +182,7 @@ public class FromFillUp extends AppCompatActivity {
             nm.createNotificationChannel(channel);
         }
 
-        Intent iNoti = new Intent(getApplicationContext(), MainActivity.class);
+        Intent iNoti = new Intent(getApplicationContext(), FromFillUp.class);
         iNoti.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
         // Specify mutability flag based on the Android version
@@ -215,7 +212,7 @@ public class FromFillUp extends AppCompatActivity {
                     .setSmallIcon(R.drawable.airplane)  // Ensure this icon is valid for notifications
                     .setContentTitle("OTP Message From Flight Booking App")
                     .setContentText("OTP - "+otp3)
-                    .setContentIntent(pi)
+//                    .setContentIntent(pi)
                     .setAutoCancel(false)
                     .setStyle(inboxStyle)
                     .setAutoCancel(true)  // Dismiss the notification after clicking it
@@ -227,7 +224,7 @@ public class FromFillUp extends AppCompatActivity {
                     .setSmallIcon(R.drawable.airplane)
                     .setContentTitle("OTP Message From Flight Booking App")
                     .setContentText("This message is for OTP")
-                    .setContentIntent(pi)
+//                    .setContentIntent(pi)
                     .setAutoCancel(false)
                     .setStyle(inboxStyle)
                     .setAutoCancel(true)
