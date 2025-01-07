@@ -22,29 +22,35 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FlightBookingSysstem"
         tools:targetApi="31">
-
         <activity
-            android:name=".MainActivity"
-            android:exported="true">
+            android:name=".ALoadActivity"
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".LikePayment" android:exported="false" />
-        <activity android:name=".TicitPrint" android:exported="false" />
-        <activity android:name=".SeatChoose" android:exported="false" />
-        <activity android:name=".FromFillUp" android:exported="true" />
-        <activity android:name=".FlightChoose" android:exported="false" />
-
-        <receiver
-            android:name=".OTPSender"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="com.example.flightbookingsysstem.OTP_ACTION" />
-            </intent-filter>
-        </receiver>
+        <activity
+            android:name=".MainActivity"
+            android:exported="false">
+        </activity>
+        <activity
+            android:name=".LikePayment"
+            android:exported="false" />
+        <activity
+            android:name=".TicitPrint"
+            android:exported="false" />
+        <activity
+            android:name=".SeatChoose"
+            android:exported="false" />
+        <activity
+            android:name=".FromFillUp"
+            android:exported="true" />
+        <activity
+            android:name=".FlightChoose"
+            android:exported="false" />
 
     </application>
+
 </manifest>
